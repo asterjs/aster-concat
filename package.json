@@ -1,0 +1,27 @@
+{
+  "name": "aster-concat",
+  "version": "0.0.0",
+  "description": "Concat with aster.",
+  "author": "Ingvar Stepanyan <me@rreverser.com> (https://github.com/RReverser)",
+  "repository": "asterjs/aster-concat",
+  "license": "MIT",
+  "keywords": [
+    "aster-plugin",
+    "ast",
+    "javascript",
+    "transform",
+    "modify",
+    "concat"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "aster": "*"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "esprima": "*"
+  }
+}
