@@ -2,7 +2,7 @@
 [![NPM version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
 
-> Concat with aster.
+> Concatenate scripts with aster.
 
 ## Usage
 
@@ -19,26 +19,19 @@ var concat = require('aster-concat');
 
 aster
     .src('src/**/*.js')
-    .then(concat({
-        from: /^p_(.*)$/,
-        to: '$1'
-    }))
+    .then(concat('lib.js'))
     .then(aster.dest('dist'));
 ```
 
 ## API
 
-### concat(options)
+### concat(fileName)
 
-#### options.from
-Type: `RegExp`
+#### fileName
+Type: `String`
+Default: `built.js`
 
-Pattern for identifiers you want to rename.
-
-#### options.to
-Type: `String` | `Function`
-
-Replacement for given identifier patterns.
+Destination file name.
 
 ## License
 

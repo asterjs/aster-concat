@@ -1,7 +1,7 @@
 {
   "name": "aster-concat",
-  "version": "1.0.0",
-  "description": "Concat with aster.",
+  "version": "1.0.1",
+  "description": "Concatenate scripts with aster.",
   "author": "Ingvar Stepanyan <me@rreverser.com> (https://github.com/RReverser)",
   "repository": "asterjs/aster-concat",
   "license": "MIT",
