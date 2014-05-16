@@ -8,23 +8,23 @@ module.exports = function (fileName) {
 	fileName = fileName || 'built.js';
 
 	return function (asts) {
-		return [{
-			type: 'File',
-			program: {
-				type: 'Program',
-				body: Promise.reduce(
-					map(asts, function (ast) {
-						return Promise.cast(ast.program).then(function (program) {
-							return program.body;
-						});
-					}),
-					function (body, bodyPart) { return body.concat(bodyPart) },
-					[]
-				)
-			},
-			loc: {
-				source: fileName
-			}
-		}];
+		var whenBody = Promise.reduce(
+			map(asts, function (ast) { return ast.program.body }),
+			function (body, bodyPart) { return body.concat(bodyPart) },
+			[]
+		);
+
+		return whenBody.then(function (body) {
+			return [{
+				type: 'File',
+				program: {
+					type: 'Program',
+					body: body
+				},
+				loc: {
+					source: fileName
+				}
+			}];
+		});
 	};
 };

@@ -1,6 +1,6 @@
 {
   "name": "aster-concat",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Concatenate scripts with aster.",
   "author": "Ingvar Stepanyan <me@rreverser.com> (https://github.com/RReverser)",
   "repository": "asterjs/aster-concat",
@@ -21,7 +21,8 @@
     "aster": "*"
   },
   "devDependencies": {
-    "mocha": "*",
-    "esprima": "*"
+    "chai": "^1.9.1",
+    "esprima": "^1.2.1",
+    "mocha": "*"
   }
 }
