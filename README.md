@@ -15,12 +15,17 @@ npm install --save-dev aster-concat
 Then, add it to your build script:
 
 ```javascript
+var aster = require('aster');
 var concat = require('aster-concat');
 
-aster
-    .src('src/**/*.js')
-    .then(concat('lib.js'))
-    .then(aster.dest('dist'));
+aster.src('src/**/*.js')
+.map(concat('output.js'))
+.map(aster.dest('dist'))
+.concatAll()
+.subscribe(
+  function (file) { console.log('%s processed successfully.', file.loc.source) },
+  function (err) { console.error('Error: %s', err) }
+);
 ```
 
 ## API
@@ -29,9 +34,9 @@ aster
 
 #### fileName
 Type: `String`
-Default: `built.js`
+Default: `'built.js'`
 
-Destination file name.
+Name of output file.
 
 ## License
 

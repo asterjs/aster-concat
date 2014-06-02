@@ -2,43 +2,36 @@
 
 'use strict';
 
-var aster = require('aster'),
-	Promise = aster.Promise,
-	assert = require('chai').assert,
-	parse = require('esprima').parse,
-	concat = require('..');
+var assert = require('assert'),
+	Rx = require('rx'),
+	parseJS = require('aster-parse-js'),
+	concat = require('..'),
+	generate = require('escodegen').generate,
+	input = Rx.Observable.fromArray([
+		{path: '1.js', contents: 'var a = function () {\n    return 1;\n};'},
+		{path: '2.js', contents: 'var b = function () {\n    return 2;\n};'},
+		{path: '3.js', contents: 'var c = function () {\n    return a() + b();\n};'}
+	]),
+	expected = input.pluck('contents').toArray().map(function (strings) { return strings.join('\n') });
 
-Promise.longStackTraces();
+function testConcat(givenFileName, expectedFileName, done) {
+	Rx.Observable.return(input)
+	.map(parseJS({loc: false}))
+	.map(concat(givenFileName))
+	.concatAll() // flattening Obs<Obs<File>> to Obs<File> for easier testing (it contains one item anyway)
+	.do(function (file) {
+		assert.equal(file.loc.source, expectedFileName);
+	})
+	.pluck('program')
+	.map(generate)
+	.zip(expected, assert.equal)
+	.subscribe(done, done);
+}
 
-describe('Transformation', function () {
-	function testConcat(givenFileName, expectedFileName) {
-		return aster.src('test/fixtures/+(a|b).js')
-			.then(concat(givenFileName))
-			.then(Promise.all)
-			.then(function (asts) {
-				assert.equal(asts.length, 1);
+it('concatenates with given output name', function (done) {
+	testConcat('lib.js', 'lib.js', done);
+});
 
-				var ast = asts[0];
-				assert.equal(ast.loc.source, expectedFileName);
-
-				return asts;
-			})
-			.then(aster.traverse({
-				enter: function (node) {
-					delete node.loc;
-				}
-			}))
-			.then(Promise.all)
-			.then(function (asts) {
-				assert.deepEqual(asts[0].program, parse('var x = 1; var y = x + 1;'));
-			});
-	}
-
-	it('concatenates with given output name', function () {
-		return testConcat('lib.js', 'lib.js');
-	});
-
-	it('concatenates with "built.js" as default name', function () {
-		return testConcat(undefined, 'built.js');
-	});
+it('concatenates with "built.js" as default name', function (done) {
+	testConcat(undefined, 'built.js', done);
 });
