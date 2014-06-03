@@ -21,11 +21,7 @@ var concat = require('aster-concat');
 aster.src('src/**/*.js')
 .map(concat('output.js'))
 .map(aster.dest('dist'))
-.concatAll()
-.subscribe(
-  function (file) { console.log('%s processed successfully.', file.loc.source) },
-  function (err) { console.error('Error: %s', err) }
-);
+.subscribe(aster.runner);
 ```
 
 ## API
